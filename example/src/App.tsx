@@ -1,31 +1,34 @@
-import * as React from 'react';
-
-import { StyleSheet, View, Text } from 'react-native';
-import { multiply } from '@ngenux/react-native-pinch-zoom-view';
+import React, { useState, useEffect } from 'react';
+import { Dimensions, View, Text } from 'react-native';
+import ZoomWrapper from '@ngenux/react-native-pinch-zoom-view';
 
 export default function App() {
-  const [result, setResult] = React.useState<number | undefined>();
+  const [windowDimensions, setWindowDimensions] = useState(
+    Dimensions.get('window')
+  );
 
-  React.useEffect(() => {
-    multiply(3, 7).then(setResult);
+  useEffect(() => {
+    const onChange = ({ window }) => {
+      setWindowDimensions(window);
+    };
+
+    let sub = Dimensions.addEventListener('change', onChange);
+    return () => sub.remove();
   }, []);
 
+  const zoomElementStyle = {
+    width: windowDimensions.width,
+    height: windowDimensions.height,
+    position: 'absolute',
+  };
+
   return (
-    <View style={styles.container}>
-      <Text>Result: {result}</Text>
+    <View style={{ flex: 1,alignItems:'center',justifyContent:'center' }}>
+      <ZoomWrapper style={zoomElementStyle} minZoom={1} maxZoom={5}>
+        <Text style={{ color: 'black', fontSize: 20 }}>
+          @ngenux/react-native-pinch-zoom-view
+        </Text>
+      </ZoomWrapper>
     </View>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  box: {
-    width: 60,
-    height: 60,
-    marginVertical: 20,
-  },
-});
