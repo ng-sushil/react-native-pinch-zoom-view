@@ -248,13 +248,12 @@ class ZoomHandler extends Component<ZoomHandlerProps, ZoomHandlerState> {
       let oldExtraScaledHeight = 0;
 
       if (this.paneLayout !== null) {
-     
         additionalScaledWidth =
-        //@ts-ignore
+          //@ts-ignore
           ((requiredScale - 1) * this.paneLayout.width) / 2;
-       
+
         additionalScaledHeight =
-        //@ts-ignore
+          //@ts-ignore
           ((requiredScale - 1) * this.paneLayout.height) / 2;
         oldExtraScaledWidth = ((scale - 1) * this.paneLayout.width) / 2;
         oldExtraScaledHeight = ((scale - 1) * this.paneLayout.height) / 2;

@@ -185,8 +185,8 @@ export default class GestureHandler extends Component<
         initialTouches.length > 1 ? angle(initialTouches) : currentAngle;
       const newAngle = currentAngle - initialAngle;
       const diffAngle = this.prevAngle - newAngle;
-      //@ts-ignore
       this.pinchStyles.transform.push({
+        //@ts-ignore
         rotate: getAngle(event, style, diffAngle),
       });
 
@@ -230,8 +230,8 @@ export default class GestureHandler extends Component<
       const max =
         isScalableObject && typeof scalable.max === 'number' ? scalable.max : 2;
 
-      //@ts-ignore
       const scale = Math.min(
+        //@ts-ignore
         Math.max(getScale(event, style, diffDistance), min),
         max
       );
