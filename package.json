@@ -37,8 +37,23 @@
   "keywords": [
     "react-native",
     "ios",
-    "android"
-  ],
+    "android",
+    "zoom",
+    "pinch-to-zoom",
+    "gesture",
+    "interactive",
+    "touch",
+    "scalable",
+    "image-zoom",
+    "zoomable-view",
+    "pinch-gesture",
+    "responsive",
+    "mobile-ui",
+    "zoom-component",
+    "react-native-zoom",
+    "react-native-gesture",
+    "mobile-development"
+],
   "repository": "https://github.com/ng-sushil/react-native-pinch-zoom-view",
   "author": "ng-sushil <sushil.shinde@ngenux.com> (https://github.com/ng-sushil)",
   "license": "MIT",
@@ -47,7 +62,8 @@
   },
   "homepage": "https://github.com/ng-sushil/react-native-pinch-zoom-view#readme",
   "publishConfig": {
-    "registry": "https://registry.npmjs.org/"
+    "registry": "https://registry.npmjs.org/",
+    "access": "public"
   },
   "devDependencies": {
     "@commitlint/config-conventional": "^17.0.2",
