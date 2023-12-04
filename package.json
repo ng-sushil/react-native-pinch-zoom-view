@@ -1,6 +1,6 @@
 {
   "name": "@ngenux/react-native-pinch-zoom-view",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "React Native component designed for easy implementation of pinch-to-zoom functionality.",
   "main": "lib/commonjs/index",
   "module": "lib/module/index",
@@ -53,7 +53,7 @@
     "react-native-zoom",
     "react-native-gesture",
     "mobile-development"
-],
+  ],
   "repository": "https://github.com/ng-sushil/react-native-pinch-zoom-view",
   "author": "ng-sushil <sushil.shinde@ngenux.com> (https://github.com/ng-sushil)",
   "license": "MIT",
