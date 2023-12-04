@@ -1,20 +1,22 @@
 //From  https://github.com/keske/react-native-easy-gestures.git
 
 import React, { Component } from 'react';
-import { PanResponder, View} from 'react-native';
+import { PanResponder, View } from 'react-native';
 
-import type { ViewStyle , GestureResponderEvent, PanResponderGestureState } from 'react-native';
+import type {
+  ViewStyle,
+  GestureResponderEvent,
+  PanResponderGestureState,
+} from 'react-native';
 // Utility functions
-import {
-  getAngle,
-  getScale,
-  getTouches,
-  isMultiTouch,
-} from '../utils/events';
+//@ts-ignore
+import { getAngle, getScale, getTouches, isMultiTouch } from '../utils/events';
+//@ts-ignore
 import { angle, distance } from '../utils/math';
 
 // Helper function to check if a value is an object
-const isObj = (value: any): value is Object => typeof value === 'object' && value !== null;
+const isObj = (value: any): value is Object =>
+  typeof value === 'object' && value !== null;
 
 // Interfaces for the draggable and scalable props
 interface DraggableShape {
@@ -58,7 +60,10 @@ interface GestureHandlerState {
 }
 
 // GestureHandler component
-export default class GestureHandler extends Component<GestureHandlerProps, GestureHandlerState> {
+export default class GestureHandler extends Component<
+  GestureHandlerProps,
+  GestureHandlerState
+> {
   private panResponder: any;
   private prevStyles: ViewStyle = {};
   private initialTouches: any;
@@ -79,19 +84,19 @@ export default class GestureHandler extends Component<GestureHandlerProps, Gestu
       top: 0,
       transform: [{ rotate: '0deg' }, { scale: 1 }],
     },
-    onStart: () => { },
-    onChange: () => { },
-    onEnd: () => { },
-    onRelease: () => { }, // Legacy
-    onMultyTouchStart: () => { },
-    onMultyTouchChange: () => { },
-    onMultyTouchEnd: () => { },
-    onRotateStart: () => { },
-    onRotateChange: () => { },
-    onRotateEnd: () => { },
-    onScaleStart: () => { },
-    onScaleChange: () => { },
-    onScaleEnd: () => { },
+    onStart: () => {},
+    onChange: () => {},
+    onEnd: () => {},
+    onRelease: () => {}, // Legacy
+    onMultyTouchStart: () => {},
+    onMultyTouchChange: () => {},
+    onMultyTouchEnd: () => {},
+    onRotateStart: () => {},
+    onRotateChange: () => {},
+    onRotateEnd: () => {},
+    onScaleStart: () => {},
+    onScaleChange: () => {},
+    onScaleEnd: () => {},
   };
 
   constructor(props: GestureHandlerProps) {
@@ -115,8 +120,10 @@ export default class GestureHandler extends Component<GestureHandlerProps, Gestu
       onShouldBlockNativeResponder: () => true,
       onStartShouldSetPanResponder: () => true,
       onPanResponderTerminationRequest: () => true,
-      onMoveShouldSetPanResponderCapture: (evt: GestureResponderEvent, gestureState: PanResponderGestureState) =>
-        gestureState.dx !== 0 && gestureState.dy !== 0,
+      onMoveShouldSetPanResponderCapture: (
+        _evt: GestureResponderEvent,
+        gestureState: PanResponderGestureState
+      ) => gestureState.dx !== 0 && gestureState.dy !== 0,
     });
   }
 
@@ -124,11 +131,12 @@ export default class GestureHandler extends Component<GestureHandlerProps, Gestu
     this.prevStyles = this.state.style;
   }
 
-  onDrag = (event: GestureResponderEvent, gestureState: PanResponderGestureState) => {
+  onDrag = (
+    _event: GestureResponderEvent,
+    gestureState: PanResponderGestureState
+  ) => {
     const { initialStyles } = this;
     const { draggable } = this.props;
-
-    const isObject = isObj(draggable);
 
     let leftValue: number;
     let topValue: number;
@@ -152,12 +160,15 @@ export default class GestureHandler extends Component<GestureHandlerProps, Gestu
     }
 
     // Determine if draggable is an object and has x or y properties
-    const isDraggableObject = typeof draggable === 'object' && draggable !== null;
+    const isDraggableObject =
+      typeof draggable === 'object' && draggable !== null;
 
-    const left = isDraggableObject && draggable.x ? leftValue + gestureState.dx : leftValue;
-    const top = isDraggableObject && draggable.y ? topValue + gestureState.dy : topValue;
-
-
+    const left =
+      isDraggableObject && draggable.x
+        ? leftValue + gestureState.dx
+        : leftValue;
+    const top =
+      isDraggableObject && draggable.y ? topValue + gestureState.dy : topValue;
 
     this.dragStyles = { left, top };
   };
@@ -170,10 +181,11 @@ export default class GestureHandler extends Component<GestureHandlerProps, Gestu
 
     if (rotatable) {
       const currentAngle = angle(getTouches(event));
-      const initialAngle = initialTouches.length > 1 ? angle(initialTouches) : currentAngle;
+      const initialAngle =
+        initialTouches.length > 1 ? angle(initialTouches) : currentAngle;
       const newAngle = currentAngle - initialAngle;
       const diffAngle = this.prevAngle - newAngle;
-
+      //@ts-ignore
       this.pinchStyles.transform.push({
         rotate: getAngle(event, style, diffAngle),
       });
@@ -208,15 +220,20 @@ export default class GestureHandler extends Component<GestureHandlerProps, Gestu
 
       const diffDistance = this.prevDistance - increasedDistance;
 
-      const isScalableObject = typeof scalable === 'object' && scalable !== null;
+      const isScalableObject =
+        typeof scalable === 'object' && scalable !== null;
 
-      const min = isScalableObject && typeof scalable.min === 'number' ? scalable.min : 0.33;
-      const max = isScalableObject && typeof scalable.max === 'number' ? scalable.max : 2;
+      const min =
+        isScalableObject && typeof scalable.min === 'number'
+          ? scalable.min
+          : 0.33;
+      const max =
+        isScalableObject && typeof scalable.max === 'number' ? scalable.max : 2;
 
-
+      //@ts-ignore
       const scale = Math.min(
         Math.max(getScale(event, style, diffDistance), min),
-        max,
+        max
       );
 
       this.pinchStyles.transform.push({ scale });
@@ -257,7 +274,10 @@ export default class GestureHandler extends Component<GestureHandlerProps, Gestu
     }
   };
 
-  onMove = (event: GestureResponderEvent, gestureState: PanResponderGestureState) => {
+  onMove = (
+    event: GestureResponderEvent,
+    gestureState: PanResponderGestureState
+  ) => {
     const { isMultyTouchingNow, style } = this.state;
     const { onChange, onMultyTouchChange } = this.props;
 
@@ -282,7 +302,8 @@ export default class GestureHandler extends Component<GestureHandlerProps, Gestu
   };
 
   onMoveEnd = (event: GestureResponderEvent) => {
-    const { isMultyTouchingNow, isRotatingNow, isScalingNow, style } = this.state;
+    const { isMultyTouchingNow, isRotatingNow, isScalingNow, style } =
+      this.state;
     const {
       onEnd,
       onMultyTouchEnd,
@@ -353,11 +374,12 @@ export default class GestureHandler extends Component<GestureHandlerProps, Gestu
 
     return (
       <View
-        ref={ref => {
+        ref={(ref) => {
           this.view = ref;
         }}
         style={style}
-        {...this.panResponder.panHandlers}>
+        {...this.panResponder.panHandlers}
+      >
         {children}
       </View>
     );

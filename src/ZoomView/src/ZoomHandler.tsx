@@ -48,7 +48,7 @@ interface ZoomHandlerProps {
   children: React.ReactNode;
 }
 
-interface ZoomHandlerState { }
+interface ZoomHandlerState {}
 
 const DOUBLE_PRESS_DELAY = 600;
 const DOUBLE_PRESS_DISTANCE = 20;
@@ -109,8 +109,7 @@ class ZoomHandler extends Component<ZoomHandlerProps, ZoomHandlerState> {
     for (let i = 0; i <= availableZoomLevelsCount; i++) {
       this.availableZoomLevels.push(
         this.minimumZoom +
-        i *
-        ((this.maximumZoom - this.minimumZoom) / availableZoomLevelsCount),
+          i * ((this.maximumZoom - this.minimumZoom) / availableZoomLevelsCount)
       );
     }
   }
@@ -120,7 +119,11 @@ class ZoomHandler extends Component<ZoomHandlerProps, ZoomHandlerState> {
     if (this.paneLayout) this.handleOrientationChange();
   }
 
-  onChange(event: GestureResponderEvent, info: any, containerDimensions: { width: number, height: number }) {
+  onChange(
+    event: GestureResponderEvent,
+    info: any,
+    containerDimensions: { width: number; height: number }
+  ) {
     const { timestamp, pageX, pageY } = event.nativeEvent;
     const scale = calculateScale(info);
     if (this.paneLayout) {
@@ -168,13 +171,20 @@ class ZoomHandler extends Component<ZoomHandlerProps, ZoomHandlerState> {
       this.adjustBorderZoom(scale, containerDimensions);
       this.zoomPanel.updateStyles();
       this.updatedCoordinates = {
-        xIsNew: false, yIsNew: false, x: this.updatedCoordinates.x,
-        y: this.updatedCoordinates.y
+        xIsNew: false,
+        yIsNew: false,
+        x: this.updatedCoordinates.x,
+        y: this.updatedCoordinates.y,
       };
     }
   }
 
-  handleTouchEnd(event: GestureResponderEvent, info: any, containerDimensions: { width: number, height: number }, recursion: number) {
+  handleTouchEnd(
+    event: GestureResponderEvent,
+    info: any,
+    containerDimensions: { width: number; height: number },
+    recursion: number
+  ) {
     if (!containerDimensions) {
       return;
     }
@@ -192,13 +202,14 @@ class ZoomHandler extends Component<ZoomHandlerProps, ZoomHandlerState> {
               event,
               info,
               containerDimensions,
-              recursion + 1,
+              recursion + 1
             ),
-          50,
+          50
         );
       }
       return;
     }
+    //@ts-ignore
     const { timestamp, pageX, pageY, locationX, locationY } = event.nativeEvent;
     const distanceX = pageX - (this.currTouchInfo.startX ?? 0);
     const distanceY = pageY - (this.currTouchInfo.startY ?? 0);
@@ -210,9 +221,8 @@ class ZoomHandler extends Component<ZoomHandlerProps, ZoomHandlerState> {
     this.prevPressTimestamp = timestamp;
     const lastTouchDistance = Math.sqrt(
       Math.pow(pageX - (this.prevTouchInfo.x ?? 0), 2) +
-      Math.pow(pageY - (this.prevTouchInfo.y ?? 0), 2)
+        Math.pow(pageY - (this.prevTouchInfo.y ?? 0), 2)
     );
-
 
     if (
       delta < DOUBLE_PRESS_DELAY &&
@@ -238,36 +248,46 @@ class ZoomHandler extends Component<ZoomHandlerProps, ZoomHandlerState> {
       let oldExtraScaledHeight = 0;
 
       if (this.paneLayout !== null) {
-        additionalScaledWidth = ((requiredScale - 1) * this.paneLayout.width) / 2;
-        additionalScaledHeight = ((requiredScale - 1) * this.paneLayout.height) / 2;
+     
+        additionalScaledWidth =
+        //@ts-ignore
+          ((requiredScale - 1) * this.paneLayout.width) / 2;
+       
+        additionalScaledHeight =
+        //@ts-ignore
+          ((requiredScale - 1) * this.paneLayout.height) / 2;
         oldExtraScaledWidth = ((scale - 1) * this.paneLayout.width) / 2;
         oldExtraScaledHeight = ((scale - 1) * this.paneLayout.height) / 2;
       }
-
 
       const centerX = containerDimensions.width / 2;
       const centerY = containerDimensions.height / 2;
 
       const yOffset = Math.abs(
-        containerDimensions.height - Dimensions.get('window').height,
+        containerDimensions.height - Dimensions.get('window').height
       );
 
       const x =
-        ((this.savedDragstyles.left ?? 0) - oldExtraScaledWidth - pageX) / scale;
-      const y =
-        ((this.savedDragstyles.top ?? 0) - oldExtraScaledHeight - pageY + yOffset) /
+        ((this.savedDragstyles.left ?? 0) - oldExtraScaledWidth - pageX) /
         scale;
-
+      const y =
+        ((this.savedDragstyles.top ?? 0) -
+          oldExtraScaledHeight -
+          pageY +
+          yOffset) /
+        scale;
+      //@ts-ignore
       const resultX = x * requiredScale + additionalScaledWidth + centerX;
+      //@ts-ignore
       const resultY = y * requiredScale + additionalScaledHeight + centerY;
-
+      //@ts-ignore
       this.setScale(requiredScale);
 
       this.zoomPanel.dragStyles = { left: resultX, top: resultY };
 
       this.prevPressTimestamp = 0;
       this.prevTouchInfo = { x: -1000, y: -1000, type: 'idk,lol' };
-
+      //@ts-ignore
       this.adjustBorderZoom(requiredScale, containerDimensions);
       this.zoomPanel.updateStyles();
       return;
@@ -296,22 +316,23 @@ class ZoomHandler extends Component<ZoomHandlerProps, ZoomHandlerState> {
     const dt =
       this.currTouchInfo.dT === 0
         ? timestamp - (this.currTouchInfo.startTime ?? 0)
-        : (this.currTouchInfo.dT ?? 0);
+        : this.currTouchInfo.dT ?? 0;
 
     const dX =
       this.currTouchInfo.dX === 0
         ? pageX - (this.currTouchInfo.prevX ?? 0)
-        : (this.currTouchInfo.dX ?? 0);
+        : this.currTouchInfo.dX ?? 0;
 
     const dY =
       this.currTouchInfo.dY === 0
         ? pageY - (this.currTouchInfo.prevY ?? 0)
-        : (this.currTouchInfo.dY ?? 0);
+        : this.currTouchInfo.dY ?? 0;
 
     if (!dt || dt === 0) return;
 
     const speedX = dX / dt;
     const speedY = dY / dt;
+    //@ts-ignore
     const time = Math.abs(Math.max(speedX, speedY) * 2500);
     if (!speedX || speedX === 0) return;
     if (!speedY || speedY === 0) return;
@@ -334,16 +355,15 @@ class ZoomHandler extends Component<ZoomHandlerProps, ZoomHandlerState> {
       useNativeDriver: true,
     }).start();
 
-    this.animatedValue.addListener(val => {
+    this.animatedValue.addListener((val) => {
       this.handleFlingAnimation(val.x, val.y, info);
     });
     this.updatedCoordinates = {
       xIsNew: false,
       yIsNew: false,
       x: this.updatedCoordinates.x,
-      y: this.updatedCoordinates.y
+      y: this.updatedCoordinates.y,
     };
-
   }
 
   async handleOrientationChange() {
@@ -361,7 +381,7 @@ class ZoomHandler extends Component<ZoomHandlerProps, ZoomHandlerState> {
       setTimeout(() => this.handleOrientationChange(), 50);
     }
   }
-
+  //@ts-ignore
   handleTouchStart(event: GestureResponderEvent, info: any) {
     this.animatedValue.removeAllListeners();
     const { timestamp, pageX, pageY } = event.nativeEvent;
@@ -382,7 +402,10 @@ class ZoomHandler extends Component<ZoomHandlerProps, ZoomHandlerState> {
     this.zoomPanel.pinchStyles = { transform: [] };
     this.zoomPanel.pinchStyles.transform.push({ scale });
   }
-  adjustBorderZoom(scale: number, containerDimensions: { width: number, height: number }) {
+  adjustBorderZoom(
+    scale: number,
+    containerDimensions: { width: number; height: number }
+  ) {
     if (!containerDimensions) {
       return;
     }
@@ -459,12 +482,12 @@ class ZoomHandler extends Component<ZoomHandlerProps, ZoomHandlerState> {
     return (
       <View style={[styles.topOverflow]}>
         <GestureHandler
-          ref={ref => {
+          ref={(ref) => {
             this.zoomPanel = ref;
             if (this.paneLayout && this.zoomPanel) {
               this.adjustBorderZoom(
                 this.scale || this.minimumZoom,
-                containerDimensions,
+                containerDimensions
               );
               this.zoomPanel.updateStyles();
             }
@@ -492,7 +515,7 @@ class ZoomHandler extends Component<ZoomHandlerProps, ZoomHandlerState> {
             min: this.minimumZoom,
             max: this.maximumZoom,
           }}
-          onScaleEnd={(event, info) => {
+          onScaleEnd={(_event, info) => {
             if (this.zoomPanel) {
               const scale = calculateScale(info);
               if (this.paneLayout) {
@@ -501,14 +524,16 @@ class ZoomHandler extends Component<ZoomHandlerProps, ZoomHandlerState> {
                 this.scale = scale;
               }
             }
-          }}>
+          }}
+        >
           <View
             style={{ minHeight: containerDimensions.height }}
-            onLayout={event => {
+            onLayout={(event) => {
               const { width, height } = event.nativeEvent.layout;
               this.paneLayout = { width, height };
               this.handleOrientationChange();
-            }}>
+            }}
+          >
             {children}
           </View>
         </GestureHandler>
